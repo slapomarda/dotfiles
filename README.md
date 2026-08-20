@@ -4,7 +4,7 @@ Configurazioni di sistema personali gestite tramite GNU Stow.
 
 ## Struttura del repository
 
-La struttura delle directory all'interno del repository rispecchia la gerarchia della directory home (~):
+La struttura delle directory all'interno del repository rispecchia la gerarchia della directory home (~), ad eccezione di `ly` che è una configurazione di sistema (/etc):
 
 ```text
 ~/dotfiles/
@@ -38,9 +38,13 @@ La struttura delle directory all'interno del repository rispecchia la gerarchia 
 ├── gtk-4.0/
 │   └── .config/
 │       └── gtk-4.0/        # GTK 4 theme settings
-└── Kvantum/
-    └── .config/
-        └── Kvantum/        # Kvantum (Qt) theme engine configurations
+├── Kvantum/
+│   └── .config/
+│       └── Kvantum/        # Kvantum (Qt) theme engine configurations
+└── ly/
+    └── etc/
+        └── ly/
+            └── config.ini  # Ly login manager configuration (Solo Backup)
 ```
 
 ## Installazione e Ripristino
@@ -57,10 +61,15 @@ Procedura per applicare le configurazioni su un nuovo sistema:
    git clone https://github.com/slapomarda/dotfiles.git ~/dotfiles
    ```
 
-3. Applicare tutti i symlink tramite Stow:
+3. Applicare tutti i symlink per l'utente locale tramite Stow:
    ```bash
    cd ~/dotfiles
-   stow -v -R -t ~ *
+   stow -v -R -t ~ hypr kitty nvim starship quickshell matugen fuzzel wlogout gtk-3.0 gtk-4.0 Kvantum
+   ```
+
+4. Ripristinare manualmente la configurazione di Ly (richiede privilegi root):
+   ```bash
+   sudo cp ~/dotfiles/ly/etc/ly/config.ini /etc/ly/config.ini
    ```
 
 ## Aggiunta di nuovi moduli/applicazioni
