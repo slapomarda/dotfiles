@@ -1,0 +1,130 @@
+import qs.modules.common
+import qs.modules.common.widgets
+import qs.services
+import QtQuick
+import QtQuick.Layouts
+import QtQuick.Controls
+import Quickshell
+import Quickshell.Bluetooth
+
+StyledPopup {
+    id: root
+
+    ColumnLayout {
+        id: columnLayout
+        anchors.centerIn: parent
+        spacing: 8
+        
+        // Fissiamo la larghezza del popup per evitare sballamenti di ancoraggio
+        Layout.minimumWidth: 260
+        Layout.maximumWidth: 260
+
+        StyledPopupHeaderRow {
+            icon: BluetoothStatus.connected ? "bluetooth_connected" : "bluetooth"
+            label: "Bluetooth"
+        }
+
+        // --- INTERRUTTORE GENERALE (Senza icona laterale) ---
+        RowLayout {
+            Layout.fillWidth: true
+            spacing: 12
+
+            StyledText {
+                text: BluetoothStatus.enabled ? "On" : "Off"
+                Layout.fillWidth: true
+                color: Appearance.colors.colOnLayer1
+            }
+
+            Switch {
+                checked: BluetoothStatus.enabled
+                onClicked: {
+                    if (Bluetooth.defaultAdapter) {
+                        Bluetooth.defaultAdapter.enabled = !Bluetooth.defaultAdapter.enabled;
+                    }
+                }
+            }
+        }
+
+        Rectangle { Layout.fillWidth: true; height: 1; color: Appearance.colors.colLayer0Border; Layout.topMargin: 4; Layout.bottomMargin: 4 }
+
+        // --- LISTA DISPOSITIVI ---
+        StyledText {
+            visible: BluetoothStatus.enabled && BluetoothStatus.friendlyDeviceList.length > 0
+            text: "Devices"
+            font.pixelSize: 12
+            color: Appearance.colors.colOnSecondaryContainer
+        }
+
+        ColumnLayout {
+            Layout.fillWidth: true
+            spacing: 4
+            visible: BluetoothStatus.enabled
+
+            Repeater {
+                model: BluetoothStatus.friendlyDeviceList
+                delegate: Rectangle {
+                    Layout.fillWidth: true
+                    height: 36
+                    radius: Appearance.rounding.small
+                    color: modelData.connected ? Appearance.colors.colLayer1 : "transparent"
+
+                    RowLayout {
+                        anchors.fill: parent
+                        anchors.margins: 8
+                        spacing: 8
+
+                        MaterialSymbol {
+                            text: modelData.connected ? "bluetooth_connected" : "bluetooth"
+                            iconSize: 18
+                            color: modelData.connected ? Appearance.colors.colOnPrimaryContainer : Appearance.colors.colOnLayer1
+                        }
+
+                        StyledText {
+                            text: modelData.name
+                            Layout.fillWidth: true
+                            elide: Text.ElideRight
+                            color: Appearance.colors.colOnLayer1
+                        }
+                    }
+
+                    MouseArea {
+                        anchors.fill: parent
+                        cursorShape: Qt.PointingHandCursor
+                        onClicked: {
+                            Quickshell.execDetached(["blueman-manager"]);
+                        }
+                    }
+                }
+            }
+        }
+
+        Rectangle { Layout.fillWidth: true; height: 1; color: Appearance.colors.colLayer0Border; Layout.topMargin: 4; Layout.bottomMargin: 4 }
+
+        // --- TASTO IMPOSTAZIONI AVANZATE (Fix Overflow e Testo) ---
+        Rectangle {
+            Layout.fillWidth: true
+            height: 36
+            color: Appearance.colors.colLayer1
+            radius: Appearance.rounding.normal
+            
+            StyledText {
+                // Ancorato ai bordi per evitare che esca
+                anchors.fill: parent
+                anchors.margins: 4
+                horizontalAlignment: Text.AlignHCenter
+                verticalAlignment: Text.AlignVCenter
+                text: "Settings"
+                color: Appearance.colors.colOnLayer1
+                elide: Text.ElideRight // Aggiunge i puntini (...) se la scritta dovesse mai risultare troppo lunga
+            }
+            
+            MouseArea {
+                anchors.fill: parent
+                cursorShape: Qt.PointingHandCursor
+                onClicked: {
+                    Quickshell.execDetached(["blueman-manager"])
+                }
+            }
+        }
+    }
+}

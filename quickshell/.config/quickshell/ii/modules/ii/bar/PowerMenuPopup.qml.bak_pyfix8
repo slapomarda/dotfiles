@@ -1,0 +1,182 @@
+import qs.modules.common
+import qs.modules.common.widgets
+import qs.services
+import QtQuick
+import QtQuick.Layouts
+import QtQuick.Controls
+import Quickshell
+
+StyledPopup {
+    id: root
+
+    ColumnLayout {
+        anchors.centerIn: parent
+        spacing: 2
+
+        // ── Night Light ───────────────────────────────────────────────
+        Rectangle {
+            Layout.fillWidth: true
+            implicitWidth: 44
+            implicitHeight: 40
+            radius: Appearance.rounding.small
+            color: nightMa.containsPress
+                ? Appearance.colors.colLayer1Active
+                : Hyprsunset.temperatureActive
+                    ? Appearance.colors.colSecondaryContainer
+                    : nightMa.containsMouse
+                        ? Appearance.colors.colLayer1Hover
+                        : "transparent"
+            Behavior on color { ColorAnimation { duration: 120 } }
+            MaterialSymbol {
+                anchors.centerIn: parent
+                text: "bedtime"
+                iconSize: 20
+                color: Hyprsunset.temperatureActive
+                    ? Appearance.m3colors.m3primary
+                    : Appearance.colors.colOnLayer1
+            }
+            MouseArea {
+                id: nightMa
+                anchors.fill: parent
+                hoverEnabled: true
+                cursorShape: Qt.PointingHandCursor
+                onClicked: Hyprsunset.toggleTemperature()
+                ToolTip.visible: containsMouse
+                ToolTip.text: "Night Light"
+                ToolTip.delay: 400
+            }
+        }
+
+        // ── Settings ─────────────────────────────────────────────────
+        Rectangle {
+            Layout.fillWidth: true
+            implicitWidth: 44
+            implicitHeight: 40
+            radius: Appearance.rounding.small
+            color: settingsMa.containsPress
+                ? Appearance.colors.colLayer1Active
+                : settingsMa.containsMouse
+                    ? Appearance.colors.colLayer1Hover
+                    : "transparent"
+            Behavior on color { ColorAnimation { duration: 120 } }
+            MaterialSymbol {
+                anchors.centerIn: parent
+                text: "settings"
+                iconSize: 20
+                color: Appearance.colors.colOnLayer1
+            }
+            MouseArea {
+                id: settingsMa
+                anchors.fill: parent
+                hoverEnabled: true
+                cursorShape: Qt.PointingHandCursor
+                onClicked: {
+                    Quickshell.execDetached(["systemsettings"]);
+                    BarPopupState.closeAll();
+                }
+                ToolTip.visible: containsMouse
+                ToolTip.text: "Settings"
+                ToolTip.delay: 400
+            }
+        }
+
+        // ── Separator ─────────────────────────────────────────────────
+        Rectangle {
+            Layout.fillWidth: true
+            implicitHeight: 1
+            color: Appearance.colors.colLayer0Border
+            Layout.topMargin: 2
+            Layout.bottomMargin: 2
+        }
+
+        // ── Sleep ─────────────────────────────────────────────────────
+        Rectangle {
+            Layout.fillWidth: true
+            implicitWidth: 44
+            implicitHeight: 40
+            radius: Appearance.rounding.small
+            color: sleepMa.containsPress
+                ? Appearance.colors.colLayer1Active
+                : sleepMa.containsMouse
+                    ? Appearance.colors.colLayer1Hover
+                    : "transparent"
+            Behavior on color { ColorAnimation { duration: 120 } }
+            MaterialSymbol {
+                anchors.centerIn: parent
+                text: "mode_standby"
+                iconSize: 20
+                color: Appearance.colors.colOnLayer1
+            }
+            MouseArea {
+                id: sleepMa
+                anchors.fill: parent
+                hoverEnabled: true
+                cursorShape: Qt.PointingHandCursor
+                onClicked: Quickshell.execDetached(["systemctl", "suspend"])
+                ToolTip.visible: containsMouse
+                ToolTip.text: "Sleep"
+                ToolTip.delay: 400
+            }
+        }
+
+        // ── Reboot ────────────────────────────────────────────────────
+        Rectangle {
+            Layout.fillWidth: true
+            implicitWidth: 44
+            implicitHeight: 40
+            radius: Appearance.rounding.small
+            color: rebootMa.containsPress
+                ? Appearance.colors.colLayer1Active
+                : rebootMa.containsMouse
+                    ? Appearance.colors.colLayer1Hover
+                    : "transparent"
+            Behavior on color { ColorAnimation { duration: 120 } }
+            MaterialSymbol {
+                anchors.centerIn: parent
+                text: "restart_alt"
+                iconSize: 20
+                color: Appearance.colors.colOnLayer1
+            }
+            MouseArea {
+                id: rebootMa
+                anchors.fill: parent
+                hoverEnabled: true
+                cursorShape: Qt.PointingHandCursor
+                onClicked: Quickshell.execDetached(["systemctl", "reboot"])
+                ToolTip.visible: containsMouse
+                ToolTip.text: "Reboot"
+                ToolTip.delay: 400
+            }
+        }
+
+        // ── Shutdown ──────────────────────────────────────────────────
+        Rectangle {
+            Layout.fillWidth: true
+            implicitWidth: 44
+            implicitHeight: 40
+            radius: Appearance.rounding.small
+            color: shutdownMa.containsPress
+                ? Appearance.colors.colLayer1Active
+                : shutdownMa.containsMouse
+                    ? Appearance.colors.colLayer1Hover
+                    : "transparent"
+            Behavior on color { ColorAnimation { duration: 120 } }
+            MaterialSymbol {
+                anchors.centerIn: parent
+                text: "power_settings_new"
+                iconSize: 20
+                color: Appearance.colors.colError
+            }
+            MouseArea {
+                id: shutdownMa
+                anchors.fill: parent
+                hoverEnabled: true
+                cursorShape: Qt.PointingHandCursor
+                onClicked: Quickshell.execDetached(["systemctl", "poweroff"])
+                ToolTip.visible: containsMouse
+                ToolTip.text: "Shutdown"
+                ToolTip.delay: 400
+            }
+        }
+    }
+}

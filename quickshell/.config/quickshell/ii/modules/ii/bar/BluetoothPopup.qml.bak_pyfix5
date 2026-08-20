@@ -1,0 +1,154 @@
+import qs.modules.common
+import qs.modules.common.widgets
+import qs.services
+import QtQuick
+import QtQuick.Layouts
+import QtQuick.Controls
+import Quickshell
+import Quickshell.Bluetooth
+
+StyledPopup {
+    id: root
+
+    ColumnLayout {
+        id: columnLayout
+        anchors.centerIn: parent
+        spacing: 8
+
+        StyledPopupHeaderRow {
+            Layout.minimumWidth: 220
+            Layout.maximumWidth: 220
+            icon: BluetoothStatus.connected ? "bluetooth_connected" : "bluetooth"
+            label: "Bluetooth"
+        }
+
+        // --- INTERRUTTORE GENERALE ---
+        RowLayout {
+            Layout.fillWidth: true
+            Layout.minimumWidth: 220
+            Layout.maximumWidth: 220
+            spacing: 12
+
+            StyledText {
+                text: BluetoothStatus.enabled ? "On" : "Off"
+                Layout.fillWidth: true
+                color: Appearance.colors.colOnLayer1
+            }
+
+            Switch {
+                checked: BluetoothStatus.enabled
+                onClicked: {
+                    if (Bluetooth.defaultAdapter) {
+                        Bluetooth.defaultAdapter.enabled = !Bluetooth.defaultAdapter.enabled;
+                    }
+                }
+            }
+        }
+
+        Rectangle { Layout.fillWidth: true; height: 1; color: Appearance.colors.colLayer0Border; Layout.topMargin: 4; Layout.bottomMargin: 4 }
+
+        // --- LISTA DISPOSITIVI ---
+        StyledText {
+            visible: BluetoothStatus.enabled && BluetoothStatus.friendlyDeviceList.length > 0
+            text: "Devices"
+            font.pixelSize: 12
+            color: Appearance.colors.colOnSecondaryContainer
+        }
+
+        ColumnLayout {
+            Layout.fillWidth: true
+            Layout.minimumWidth: 220
+            Layout.maximumWidth: 220
+            spacing: 4
+            visible: BluetoothStatus.enabled
+
+            Repeater {
+                model: BluetoothStatus.friendlyDeviceList
+                delegate: Rectangle {
+                    id: deviceEntry
+                    required property var modelData
+                    Layout.fillWidth: true
+                    height: 36
+                    radius: Appearance.rounding.small
+                    color: modelData.connected
+                        ? Appearance.colors.colLayer1
+                        : deviceMouseArea.containsPress
+                            ? Appearance.colors.colLayer1Hover
+                            : deviceMouseArea.containsMouse
+                                ? Appearance.colors.colLayer1Hover
+                                : "transparent"
+
+                    Behavior on color {
+                        ColorAnimation { duration: 120 }
+                    }
+
+                    RowLayout {
+                        anchors.fill: parent
+                        anchors.margins: 8
+                        spacing: 8
+
+                        MaterialSymbol {
+                            text: modelData.connected ? "bluetooth_connected" : "bluetooth"
+                            iconSize: 18
+                            color: modelData.connected ? Appearance.colors.colOnPrimaryContainer : Appearance.colors.colOnLayer1
+                        }
+
+                        StyledText {
+                            text: modelData.name
+                            Layout.fillWidth: true
+                            elide: Text.ElideRight
+                            color: Appearance.colors.colOnLayer1
+                        }
+
+                        StyledText {
+                            visible: modelData.connected
+                            text: "Connected"
+                            font.pixelSize: 11
+                            color: Appearance.colors.colOnSecondaryContainer
+                        }
+                    }
+
+                    MouseArea {
+                        id: deviceMouseArea
+                        anchors.fill: parent
+                        hoverEnabled: true
+                        cursorShape: Qt.PointingHandCursor
+                        onClicked: {
+                            if (deviceEntry.modelData.connected) {
+                                deviceEntry.modelData.disconnect();
+                            } else if (deviceEntry.modelData.paired) {
+                                deviceEntry.modelData.connect();
+                            } else {
+                                deviceEntry.modelData.pair();
+                            }
+                        }
+                    }
+                }
+            }
+
+            StyledText {
+                visible: BluetoothStatus.enabled && BluetoothStatus.friendlyDeviceList.length === 0
+                text: "No devices found"
+                font.pixelSize: 12
+                color: Appearance.colors.colOnLayer1
+                Layout.topMargin: 4
+                Layout.bottomMargin: 4
+            }
+        }
+
+        Rectangle { Layout.fillWidth: true; height: 1; color: Appearance.colors.colLayer0Border; Layout.topMargin: 4; Layout.bottomMargin: 4 }
+
+        // --- TASTO IMPOSTAZIONI AVANZATE ---
+        RippleButton {
+            Layout.fillWidth: true
+            Layout.minimumWidth: 220
+            Layout.maximumWidth: 220
+            implicitHeight: 36
+            buttonRadius: Appearance.rounding.normal
+            buttonText: "Settings"
+            onClicked: {
+                Quickshell.execDetached(["blueman-manager"]);
+            }
+        }
+    }
+}

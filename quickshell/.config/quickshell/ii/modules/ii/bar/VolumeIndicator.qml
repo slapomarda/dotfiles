@@ -1,0 +1,80 @@
+import qs.modules.common
+import qs.modules.common.widgets
+import qs.services
+import QtQuick
+import QtQuick.Layouts
+MouseArea {
+    id: root
+    property bool borderless: Config.options.bar.borderless
+
+    implicitWidth: layout.implicitWidth + 16
+    implicitHeight: Appearance.sizes.barHeight
+
+    hoverEnabled: false
+    cursorShape: Qt.PointingHandCursor
+    onWheel: event => {
+        if (event.angleDelta.y > 0) Audio.incrementVolume();
+        else Audio.decrementVolume();
+    }
+
+    readonly property bool isPopupOpen: BarPopupState.openPopup === "volume"
+
+    onClicked: {
+        BarPopupState.toggle("volume")
+    }
+    onIsPopupOpenChanged: {
+        if (isPopupOpen) {
+            Qt.callLater(() => {
+                if (volumePopup.item) {
+                    GlobalFocusGrab.addDismissable(volumePopup.item);
+                }
+            });
+        } else {
+            if (volumePopup.item) {
+                GlobalFocusGrab.removeDismissable(volumePopup.item);
+            }
+        }
+    }
+    Connections {
+        target: GlobalFocusGrab
+        function onDismissed() {
+            BarPopupState.close("volume");
+        }
+    }
+    RowLayout {
+        id: layout
+        anchors.centerIn: parent
+        spacing: 6
+        MaterialSymbol {
+            id: volumeIcon
+            text: {
+                if (Audio.sink?.audio?.muted ?? false) return "volume_off";
+                const v = Audio.value;
+                if (v > 0.6) return "volume_up";
+                if (v > 0) return "volume_down";
+                return "volume_mute";
+            }
+            iconSize: Appearance.font.pixelSize.larger
+            color: Appearance.colors.colOnLayer1
+        }
+        StyledText {
+            text: Audio.sink ? Audio.friendlyDeviceName(Audio.sink) : "Audio"
+            font.pixelSize: 13
+            color: Appearance.colors.colOnLayer1
+            Layout.maximumWidth: 150
+            elide: Text.ElideRight
+        }
+    }
+    Item {
+        id: ghostAnchor
+        anchors.right: parent.right
+        anchors.verticalCenter: parent.verticalCenter
+        width: volumePopup.implicitWidth || 240
+        height: 1
+    }
+    VolumePopup {
+        id: volumePopup
+        hoverTarget: ghostAnchor
+        active: root.isPopupOpen
+    }
+}

@@ -1,0 +1,20 @@
+pragma Singleton
+import Quickshell
+import QtQuick
+
+Singleton {
+    id: root
+    // Nome del popup attualmente aperto in barra ("" = nessuno)
+    property string openPopup: ""
+
+    function toggle(name) {
+        root.openPopup = (root.openPopup === name) ? "" : name;
+    }
+    function close(name) {
+        if (root.openPopup === name)
+            root.openPopup = "";
+    }
+    function closeAll() {
+        root.openPopup = "";
+    }
+}
