@@ -1,90 +1,63 @@
-# 🛠️ My Arch Linux & Hyprland Dotfiles
+# Arch Linux and Hyprland Dotfiles
 
-Questo repository contiene le mie configurazioni personali (dotfiles) per Arch Linux, Hyprland, Kitty, Neovim e altro.
-Gestito in modo semplice ed elegante utilizzando **GNU Stow**.
+Configurazioni di sistema personali gestite tramite GNU Stow.
 
-## 📂 Struttura del Repository
+## Struttura del repository
 
-GNU Stow funziona creando collegamenti simbolici (symlink) dalla Home directory (`~`) verso i file di questo repository. La struttura riflette esattamente la Home:
+La struttura delle directory all'interno del repository rispecchia la gerarchia della directory home (~):
 
 ```text
 ~/dotfiles/
 ├── hypr/
 │   └── .config/
-│       └── hypr/           # Configurazione di Hyprland, Hyprlock, Hypridle
+│       └── hypr/           # Hyprland, Hyprlock, Hypridle
 ├── kitty/
 │   └── .config/
-│       └── kitty/          # Configurazione del terminale Kitty
+│       └── kitty/          # Kitty terminal emulator
 ├── nvim/
 │   └── .config/
-│       └── nvim/           # Configurazione dell'editor Neovim
+│       └── nvim/           # Neovim text editor
 └── starship/
     └── .config/
-        └── starship.toml   # Configurazione del prompt Starship
+        └── starship.toml   # Starship shell prompt
 ```
 
----
+## Installazione e Ripristino
 
-## 🚀 Come Ripristinare (Su una nuova macchina)
+Procedura per applicare le configurazioni su un nuovo sistema:
 
-Se vuoi installare queste configurazioni su un nuovo sistema Arch Linux o in caso di formattazione:
-
-1. **Installa Git e GNU Stow**:
+1. Installare le dipendenze:
    ```bash
    sudo pacman -S git stow
    ```
 
-2. **Clona questo repository nella tua home**:
+2. Clonare il repository nella home directory:
    ```bash
    git clone https://github.com/slapomarda/dotfiles.git ~/dotfiles
    ```
 
-3. **Applica le configurazioni tramite Stow**:
+3. Applicare i symlink tramite Stow:
    ```bash
    cd ~/dotfiles
    stow -v -R -t ~ hypr kitty nvim starship
    ```
-   *Nota: Se ci sono già file di configurazione predefiniti generati dal sistema che vanno in conflitto, eliminali o rinominali prima di lanciare `stow`.*
 
----
+## Aggiunta di nuovi moduli/applicazioni
 
-## ➕ Come Aggiungere una Nuova Applicazione
+Procedura per aggiungere una nuova configurazione (es. `fish`):
 
-Se vuoi iniziare a gestire una nuova configurazione (es. `fish` shell) tramite questo repository:
-
-1. Crea la struttura delle cartelle dentro `~/dotfiles` che riproduca il percorso originale a partire dalla home:
+1. Creare la gerarchia di directory corrispondente:
    ```bash
    mkdir -p ~/dotfiles/fish/.config
    ```
 
-2. Sposta la cartella di configurazione originale dentro quella nuova:
+2. Spostare la directory di configurazione originale nel repository:
    ```bash
    mv ~/.config/fish ~/dotfiles/fish/.config/
    ```
 
-3. Usa Stow per creare il collegamento simbolico:
+3. Creare il symlink tramite Stow:
    ```bash
    cd ~/dotfiles
    stow -v -R -t ~ fish
    ```
-
-4. Aggiungi le modifiche a Git, fai il commit e fai il push:
-   ```bash
-   git add .
-   git commit -m "feat: add fish configuration"
-   git push origin main
-   ```
-
----
-
-## 🔄 Flusso di Lavoro Giornaliero
-
-Quando modifichi un file (es. modifichi il file di configurazione di Hyprland in `~/.config/hypr/hyprland.conf`), in realtà stai modificando direttamente il file dentro `~/dotfiles/hypr/.config/hypr/hyprland.conf` grazie al symlink.
-
-Per salvare e sincronizzare le modifiche su GitHub ti basta fare:
-```bash
-cd ~/dotfiles
-git add .
-git commit -m "style: modifiche al tema di hyprland"
-git push
-```
