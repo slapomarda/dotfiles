@@ -17,9 +17,30 @@ La struttura delle directory all'interno del repository rispecchia la gerarchia 
 ├── nvim/
 │   └── .config/
 │       └── nvim/           # Neovim text editor
-└── starship/
+├── starship/
+│   └── .config/
+│       └── starship.toml   # Starship shell prompt
+├── quickshell/
+│   └── .config/
+│       └── quickshell/     # Quickshell widgets/status bar (illogical impulse)
+├── matugen/
+│   └── .config/
+│       └── matugen/        # Material You color generator
+├── fuzzel/
+│   └── .config/
+│       └── fuzzel/         # Fuzzel application launcher
+├── wlogout/
+│   └── .config/
+│       └── wlogout/        # Logout menu
+├── gtk-3.0/
+│   └── .config/
+│       └── gtk-3.0/        # GTK 3 theme settings
+├── gtk-4.0/
+│   └── .config/
+│       └── gtk-4.0/        # GTK 4 theme settings
+└── Kvantum/
     └── .config/
-        └── starship.toml   # Starship shell prompt
+        └── Kvantum/        # Kvantum (Qt) theme engine configurations
 ```
 
 ## Installazione e Ripristino
@@ -36,10 +57,10 @@ Procedura per applicare le configurazioni su un nuovo sistema:
    git clone https://github.com/slapomarda/dotfiles.git ~/dotfiles
    ```
 
-3. Applicare i symlink tramite Stow:
+3. Applicare tutti i symlink tramite Stow:
    ```bash
    cd ~/dotfiles
-   stow -v -R -t ~ hypr kitty nvim starship
+   stow -v -R -t ~ *
    ```
 
 ## Aggiunta di nuovi moduli/applicazioni
