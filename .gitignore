@@ -1,0 +1,5 @@
+# Ignora file di backup o temporanei
+*~
+*.bak
+*.swp
+.DS_Store

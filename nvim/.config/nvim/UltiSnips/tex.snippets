@@ -1,0 +1,175 @@
+
+snippet dfn "Definizione"
+\\dfn{${1:Titolo}}{
+    ${0:contenuto}
+}
+endsnippet
+
+snippet thm "Teorema"
+\\thm{${1:Titolo}}{
+    ${0:contenuto}
+}
+endsnippet
+
+snippet ex "Esempio"
+\\ex{${1:Titolo}}{
+    ${0:contenuto}
+}
+endsnippet
+
+snippet dem "Dimostrazione"
+\\dem{}{
+    ${0:contenuto}
+}
+endsnippet
+
+snippet exer "Esercizio"
+\\exer{${1:Titolo}}{
+    ${0:contenuto}
+}
+endsnippet
+
+snippet oss "Osservazione"
+\\osv{${1:Titolo}}{
+    ${0:contenuto}
+}
+endsnippet
+
+snippet cor "Corollario"
+\\cor{${1:Titolo}}{
+    ${0:contenuto}
+}
+endsnippet
+
+
+snippet nt "Nota"
+\\nt{${1:Titolo}}{
+    ${0:contenuto}
+}
+endsnippet
+
+
+snippet vrb "Verbatim"
+\\begin{Verbatim}[tabsize=3]
+${0:contenuto}
+\\end{Verbatim}
+endsnippet
+
+snippet cppblk "Blocco lstlisting con style=mycpp" b
+\begin{lstlisting}[style=mycpp]
+${1:/* codice */ }
+\end{lstlisting}
+endsnippet
+
+snippet np "Insert \\newpage" b
+\newpage
+endsnippet
+
+snippet minip "Due minipage affiancate con allineamento top, contenuti modificabili" b
+\begin{minipage}[t]{${1:0.6\textwidth}}
+\vspace{0cm}
+${2:Contenuto della prima minipage. Può essere testo, formule, ecc.}
+\end{minipage}%
+\hfill
+\begin{minipage}[t]{${3:0.4\textwidth}}
+\vspace{0cm}
+${4:Contenuto della seconda minipage. Può essere testo, formule, tabelle o immagini.}
+\end{minipage}
+endsnippet
+
+snippet vsp "Insert \\vspace{<cm>}" b
+\vspace{${1:0.2}cm}
+endsnippet
+
+snippet im "Inline math $ ... $" b
+$${1}$
+endsnippet
+
+snippet dm "Display math \\[ ... \\]" b
+\[
+${1}
+\]
+endsnippet
+
+snippet mbb "Mathbb"
+\\mathbb{${0:contenuto}}
+endsnippet
+
+snippet mcal "Mathcal"
+\\mathcal{${0:contenuto}}
+endsnippet
+
+
+snippet int "Integrale"
+\\int_{${1:a}}^{${2:b}} ${0:espressione} \\, d${3:x}
+endsnippet
+
+snippet pmat "empty pmatrix" b
+\begin{{pmatrix}}
+    $1
+\end{{pmatrix}}
+$0
+endsnippet
+
+snippet img "Immagine centrata"
+\\begin{center}
+    \\includegraphics[width=${1:0.6}\\textwidth]{./images/${2:sorgenteEseguibile.png}}
+\\end{center}
+endsnippet
+
+snippet wrap "Wrapfigure a destra con ./images/ fisso" b
+\begin{wrapfigure}[10]{r}{0.4\textwidth} % "r" = right
+    \hspace{10pt} % spazio orizzontale tra immagine e testo
+    \includegraphics[width=\linewidth]{./images/${1:nomefile.png}}
+\end{wrapfigure}
+$0
+endsnippet
+
+
+snippet ul "Uline"
+\\uline{${0:contenuto}}
+endsnippet
+
+snippet bf "Grassetto"
+\\textbf{${0:contenuto}}
+endsnippet
+
+snippet tt "Monospaziato"
+\\texttt{${0:contenuto}}
+endsnippet
+
+snippet ita "Italico"
+\\textit{${0:contenuto}}
+endsnippet
+
+
+
+snippet item "Itemize base"
+\\begin{itemize}
+    \\item ${0:voce}
+\\end{itemize}
+endsnippet
+
+snippet enum "Enumerate base"
+\\begin{enumerate}
+    \\item ${0:voce}
+\\end{enumerate}
+endsnippet
+
+
+
+snippet sec "Section"
+\\section{${0:Titolo}}
+endsnippet
+
+snippet ssec "Subsection"
+\\subsection{${0:Titolo}}
+endsnippet
+
+snippet sssec "Subsubsection"
+\\subsubsection{${0:Titolo}}
+endsnippet
+
+snippet chap "Chapter"
+\\chapter{${0:Titolo}}
+endsnippet
